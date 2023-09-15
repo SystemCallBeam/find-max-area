@@ -21,6 +21,8 @@ class Lab7_max_square_and_edit_distance {
         int ans = find_max_area_recurse_entry(data);
         System.out.println(ans);
 
+        System.out.println(q1_2_find_max_area_dynamic_program(data, rows, cols));
+
         System.out.println(q2_string_edit_distance(str1, str2));
     }
 
@@ -51,12 +53,26 @@ class Lab7_max_square_and_edit_distance {
         int tmp = (right < down ? right : down);
         size += (rdown < tmp ? rdown : tmp);
 
-        max_so_far_for_recursion = size > max_so_far_for_recursion ? size : max_so_far_for_recursion;
+        max_so_far_for_recursion = Math.max(max_so_far_for_recursion, size);
         return size;
     }
 
-    private static int q1_2_find_max_area_recurse(int[][] mat, int r, int c) {
-        return 0;
+    private static int q1_2_find_max_area_dynamic_program(int[][] mat, int r, int c) {
+        int dp[][] = new int[r][c];
+        int max = 0;
+        for (int i = 0; i < mat.length; i++) {
+            for (int j = 0; j < mat[0].length; j++) {
+                if (mat[i][j] == 1) {
+                    if (i == 0 || j == 0) {
+                        dp[i][j] = mat[i][j];
+                    } else {
+                        dp[i][j] += 1 + Math.min(dp[i - 1][j - 1], Math.min(dp[i][j - 1], dp[i - 1][j]));
+                    }
+                    max = Math.max(max, dp[i][j]);
+                }
+            }
+        }
+        return max * max;
     }
 
     private static int q2_string_edit_distance(String str1, String str2) {
